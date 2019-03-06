@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Regex Text Finder</title>
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="header">
+  <div class="home-menu pure-menu pure-menu-horizontal pure-menu-fixed">
+    <span class="pure-menu-heading" href="">Regex Text Finder</span>
+  </div>
+</div>
+
+<div class="content-wrapper">
+  <div class="content">
+  <div>
+    <select id="regexStrHist" onchange="regexStrInput.value = this.value;" class="full-width"></select>
+  </div>
+  <div>
+    <input type="text" id="regexStr" class="full-width"
+    onkeypress="if ((event.charCode || event.keyCode) === 13) find();"
+    />
+    <button onclick="find();">Find</button>
+    <button onclick="clearHistory();">Clear History</button>
+    <button onclick="removeDuplicates();">Remove Duplicates</button>
+    <button onclick="formatResults();">Format Results</button>
+  <div>
+
+  <div>
+    <strong>Text Body:</strong>
+    <textarea id="text-body" rows="10" class="full-width"></textarea>
+  </div>
+
+  <div>
+    <strong>Format Results (replace {result}):</strong>
+    <textarea id="format-text" rows="10" class="full-width"></textarea>
+  </div>
+
+  <div id="output"></div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body></html>
