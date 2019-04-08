@@ -5,19 +5,23 @@ const regexStrInput = document.getElementById("regexStr");
 const textBodyInput = document.getElementById("text-body");
 const formatTextBodyInput = document.getElementById("format-text");
 const outputDiv = document.getElementById("output");
+const formattedOutput = document.getElementById("formattedOutput");
 const regexStrHistSelect = document.getElementById("regexStrHist");
+
+const showFormatDisplayCbx = document.getElementById("showFormatDisplayCbx");
 
 //buttons
 const clearBtn = document.getElementById("clearBtn");
 const findBtn = document.getElementById("findBtn");
 const formatBtn = document.getElementById("formatBtn");
 const removeDuplicatesBtn = document.getElementById("removeDuplicatesBtn");
+const sortResultsBtn = document.getElementById("sortResultsBtn");
 
 const goSound = new Audio('../public/app_alert-complete.mp3')
 const errSound = new Audio('../public/app_alert-error.mp3')
 let data = {
   'regexStr': "",
-  'regexStrHist': [],
+  'regexStrHist': ["<a href=\"([\\w/_-]+)\"[\\w\\s/_=\"-]+title=\"([\\w\\s/_=-]+)\">([\\w\\s]+)</a>"],
   'textBody': "",
   'formatResults': "{result}\n",
   'results': [],
@@ -35,10 +39,14 @@ window.onload = function() {
   regexStrHistSelect.onchange = function() {
     regexStrInput.value = regexStrHistSelect.value;
   };
-  document.getElementById("clearBtn").onclick = function() { clearHistory(); };
+  clearBtn.onclick = function() { clearHistory(); };
   findBtn.onclick = function() { find(); };
-  formatBtn.onclick = function() { formatResults(); };
+  formatBtn.onclick = function() {
+    formatResults();
+    showFormatDisplayCbx.checked = true;
+  };
   removeDuplicatesBtn.onclick = function() { removeDuplicates(); };
+  sortResultsBtn.onclick = function() { sortResults(); };
 };
 /**
  * @public
@@ -69,13 +77,15 @@ function formatResults() {
       }
       str += formattedStr;
     }
-    outputDiv.innerHTML = '<strong>Formatted Results (' + size + '):</strong> <textarea rows="10" class="full-width">' + str + '</textarea>';
+    formattedOutput.innerHTML = '<strong>Formatted Results (' + size + '):</strong>'
+      + '<textarea rows="10" class="full-width">' + str + '</textarea>';
   }
   saveData();
 }
-/**
- * @public
- */
+function sortResults() {
+  data['results'] = data['results'].sort();
+  displayData();
+}
 function removeDuplicates() {
   const uniqueSet = [];
   const newResults = [];
@@ -88,7 +98,7 @@ function removeDuplicates() {
         newResults.push(data['results'][i]);
       }
     }
-    data['results'] = newResults.sort();
+    data['results'] = newResults;
     saveData();
     displayData();
   }
@@ -98,8 +108,11 @@ function removeDuplicates() {
  */
 function find() {
   if (outputDiv && regexStrInput && textBodyInput) {
-    let regexStr = regexStrInput.value;
+    const regexStr = regexStrInput.value;
     let regex = null;
+    if (!regexStr) {
+      return;
+    }
     try {
       regex = new RegExp(regexStr, 'i');
       //'g' gets all matches, but the full match
@@ -148,14 +161,23 @@ function find() {
     if (results.length > 0) {
       data['regexStr'] = regexStr;
       data['results'] = results;
+      showResultButtons(true);
       playGoSoundFx();
       saveData();
       displayData();
     }
     else {
+      showResultButtons(false);
       playErrSoundFx();
       outputDiv.innerHTML = "Nothing found";
     }
+  }
+}
+function showResultButtons(show) {
+  const resultButtons = document.querySelectorAll(".result-btn");
+  const size = resultButtons.length;
+  for (var i = 0; i < size; i++) {
+    resultButtons[i].style.display = show ? "block" : "none";
   }
 }
 function loadData() {
@@ -184,19 +206,28 @@ function displayData() {
     formatTextBodyInput.value = data['formatResults'];
     if (data['results']) {
       const count = data['results'].length;
-      let outputStr = "";
-      outputStr = "<strong>Results (" + count + "):</strong> <ul>"
+      if (count > 0) {
+        showResultButtons(true);
+      }
+      let outputStr = [];
+      outputStr.push("<strong>Results (");
+      outputStr.push(count);
+      outputStr.push("):</strong> <ol>");
       for (let i = 0; i < count; i++) {
-        outputStr += "<li>" + encodedStr(data['results'][i][0]) + "</li>";
-        outputStr += "<ul>";
+        outputStr.push("<li>");
+        outputStr.push(encodedStr(data['results'][i][0]));
+        outputStr.push("</li>");
+        outputStr.push("<ol>");
         let subSize = data['results'][i].length;
         for (let j = 1; j < subSize; j++) {
-          outputStr += "<li>" + encodedStr(data['results'][i][j]) + "</li>";
+          outputStr.push("<li>");
+          outputStr.push(encodedStr(data['results'][i][j]));
+          outputStr.push("</li>");
         }
-        outputStr += "</ul>";
+        outputStr.push("</ol>");
       }
-      outputStr += "</ul>";
-      outputDiv.innerHTML = outputStr;
+      outputStr.push("</ol>");
+      outputDiv.innerHTML = outputStr.join("");
     }
   }
 }
@@ -222,7 +253,7 @@ function clearData() {
   window.localStorage.setItem(APP_DATA_KEY, JSON.stringify(data));
 }
 function encodedStr(str) {
-  return str.replace(/[\u00A0-\u9999<>\&]/gim, function(i) {
+  return str ? str.replace(/[\u00A0-\u9999<>\&]/gim, function(i) {
     return '&#'+i.charCodeAt(0)+';';
-  });
+  }) : "";
 }

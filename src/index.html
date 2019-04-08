@@ -6,44 +6,88 @@
     integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
   <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+
 <div class="header">
   <div class="home-menu pure-menu pure-menu-horizontal pure-menu-fixed">
-    <span class="pure-menu-heading" href="">Regex Group Find and Format Text</span>
-    <span style="color:white;">&copy; Copyright 2019, Lewis Nakao, All rights reserved.</span>
+    <span class="pure-menu-heading">Regex Group Find and Format Text</span>
+    <ul class="pure-menu-list">
+      <li class="pure-menu-item">
+        <a href="#about" class="pure-menu-link" title="About this Project">&#128712;</a>
+      </li>
+    </ul>
   </div>
 </div>
 
 <div class="content-wrapper">
   <div class="content">
-  <table class="full-width"><tr><td class="full-width">
-    <select id="regexStrHist" class="full-width"></select>
-  </td><td>
-    <button id="clearBtn" class="top-right-btn">Clear</button>
-  </td></tr>
-  <tr><td>
-    <input type="text" id="regexStr" class="full-width" />
-  </td><td>
-    <button id="findBtn" class="top-right-btn">Find</button>
-  </td></tr></table>
-  <div>
+    <table class="full-width">
+      <tbody>
+        <tr>
+          <td><strong>History:</strong>&nbsp;</td>
+          <td class="full-width">
+            <select id="regexStrHist" class="full-width"></select>
+          </td>
+          <td>
+            <button id="clearBtn" class="top-right-btn" title="Clear History">Clear</button>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>RegExp:</strong>&nbsp;</td>
+          <td>
+            <input type="text" id="regexStr" class="full-width" />
+          </td>
+          <td>
+            <button id="findBtn" class="top-right-btn">Find</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
 
-  <strong>Text Body:</strong>
-  <div>
-    <textarea id="text-body" rows="10" class="full-width"></textarea>
-  </div>
+    <div>
+      <strong>Content:</strong>
+      <textarea id="text-body" rows="10" class="full-width"></textarea>
+    </div>
 
-  <strong>Format Results (replaces {result},  {result1}, etc.):</strong>
-  <button id="formatBtn">Format Results</button>
-  <div>
-    <textarea id="format-text" rows="10" class="full-width"></textarea>
-  </div>
+    <div>
+      <input id="showFormatDisplayCbx" type="checkbox" class="hide" />
+      <label for="showFormatDisplayCbx" class="label-btn">
+        &nbsp;<strong>Format Results (replaces {result}, {result1}, {result2}, etc.):</strong>
+      </label>
+      <div id="formatDisplay" class="hide">
+        <textarea id="format-text" rows="5" class="full-width"></textarea>
+        <button id="formatBtn">Format Results</button>
+        <div id="formattedOutput"></div>
+      </div>
+    </div>
 
-  <button id="removeDuplicatesBtn">Remove Duplicates</button>
-  <div id="output"></div>
+    <div>
+      <button id="sortResultsBtn" class="result-btn" style="display: none;">Sort Results</button>
+      <button id="removeDuplicatesBtn" class="result-btn" style="display: none;">Remove Duplicates</button>
+      <div id="output"></div>
+    </div>
   </div>
 </div>
 
+<div id="about" class="modal-window">
+  <div>
+    <h3>What?</h3>
+    <p></p>
+
+    <h3>Why?</h3>
+    <p></p>
+
+    <h3>Author: Lewis Nakao</h3>
+    <p>Thank you for taking your time to view my app. I am a software engineer in Hawaii.</p>
+    <p><a href="https://lewdev.github.io">Learn more about Lewis</a></p>
+
+    <p>Libraries Used:
+      <a href="https://developers.google.com/closure/compiler/">Google Closure Compiler</a>,
+      <a href="http://purecss.io">Pure.css</a>,
+      <a href="https://codepen.io/timothylong/pen/HhAer/">CSS only Modal</a>
+    </p>
+  </div>
+  <a href="#" title="Close" class="modal-close">&#10006;</a>
+</div>
 <script src="script.js"></script>
 </body></html>
