@@ -128,9 +128,9 @@ function find() {
     //if the regexStr already exists in history, remove it
     if (data['regexStrHist'].includes(regexStr)) {
       for( var i = 0; i < data['regexStrHist'].length; i++){ 
-         if ( data['regexStrHist'][i] === regexStr) {
-           data['regexStrHist'].splice(i, 1); 
-         }
+        if ( data['regexStrHist'][i] === regexStr) {
+          data['regexStrHist'].splice(i, 1); 
+        }
       }
     }
     //unshift adds it to the top of the array.
@@ -147,7 +147,8 @@ function find() {
       if (index >= textBodyLen) {
         done = true;
       }
-      else {        temp = data['textBody'].substr(index);
+      else {
+        temp = data['textBody'].substr(index);
         result = temp.match(regex);
         if (result) {
           results.push(result);
